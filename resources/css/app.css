@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/*
+ * Token semantik tema terang/gelap.
+ * `@theme inline` membuat utilitas (bg-surface, text-content, dll.) merujuk
+ * langsung ke variabel CSS sehingga berubah saat kelas `.dark` aktif.
+ */
+@theme inline {
+    --color-surface: var(--surface);
+    --color-surface-muted: var(--surface-muted);
+    --color-content: var(--content);
+    --color-muted: var(--muted);
+    --color-border: var(--border);
+}
+
+:root {
+    --surface: #ffffff;
+    --surface-muted: #f8fafc;
+    --content: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+}
+
+.dark {
+    --surface: #0f172a;
+    --surface-muted: #111c2e;
+    --content: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #1e293b;
+}
+
+html.dark {
+    color-scheme: dark;
+}
