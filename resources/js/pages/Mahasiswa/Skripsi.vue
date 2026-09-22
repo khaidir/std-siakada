@@ -1,11 +1,16 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/layouts/AuthenticatedLayout.vue';
 import PageHeader from '@/components/shared/PageHeader.vue';
+import Stepper from '@/components/shared/Stepper.vue';
+import DataTable from '@/components/shared/DataTable.vue';
 import Card from '@/components/ui/Card.vue';
 import Badge from '@/components/ui/Badge.vue';
-import Table from '@/components/ui/Table.vue';
+import Button from '@/components/ui/Button.vue';
+import Input from '@/components/ui/Input.vue';
+import Textarea from '@/components/ui/Textarea.vue';
+import Tabs from '@/components/ui/Tabs.vue';
 import EmptyState from '@/components/ui/EmptyState.vue';
 
 const props = defineProps({
@@ -21,6 +26,13 @@ const form = ref({
 });
 
 const submitting = ref(false);
+const errors = ref({});
+const activeTab = ref('status');
+
+const tabs = [
+    { value: 'status', label: 'Status TA/PA' },
+    { value: 'bimbingan', label: 'Bimbingan Online' },
+];
 
 const statusLabel = {
     proposal: 'Proposal',
@@ -31,219 +43,198 @@ const statusLabel = {
 };
 
 const statusVariant = {
-    proposal: 'blue',
-    seminar_proposal: 'amber',
-    sidang: 'violet',
-    lulus: 'emerald',
-    revisi: 'rose',
+    proposal: 'info',
+    seminar_proposal: 'warning',
+    sidang: 'primary',
+    lulus: 'success',
+    revisi: 'danger',
 };
 
+// Tahapan resmi TA/PA sesuai spesifikasi desain.
+const steps = [
+    { label: 'Pengajuan Proposal' },
+    { label: 'Bimbingan' },
+    { label: 'Daftar Sidang' },
+    { label: 'Wisuda' },
+];
+
 const timelineSteps = ['proposal', 'seminar_proposal', 'sidang', 'lulus'];
+
+const currentStep = computed(() => {
+    const index = timelineSteps.indexOf(props.thesis?.status);
+    // Status 'revisi' tidak memundurkan tahapan; mahasiswa tetap di fase bimbingan.
+    if (index < 0) return props.thesis?.status === 'revisi' ? 1 : 0;
+    return index;
+});
 
 const columns = [
     { key: 'date', label: 'Tanggal' },
     { key: 'activity', label: 'Aktivitas' },
     { key: 'notes', label: 'Catatan' },
-    { key: 'approval', label: 'Status' },
+    { key: 'approval', label: 'Status', align: 'center' },
 ];
+
+const rows = computed(() =>
+    (props.logs ?? []).map((log) => ({
+        date: formatDate(log.date),
+        activity: log.activity,
+        notes: log.notes || '—',
+        approval: log.supervisor_approval,
+    })),
+);
 
 function formatDate(date) {
     if (!date) return '';
-    const d = new Date(date);
-    return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-}
-
-function approvalBadgeVariant(approved) {
-    return approved ? 'emerald' : 'amber';
-}
-
-function approvalLabel(approved) {
-    return approved ? 'Disetujui' : 'Pending';
-}
-
-function currentStepIndex() {
-    if (!props.thesis?.status) return -1;
-    const idx = timelineSteps.indexOf(props.thesis.status);
-    return idx;
+    return new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 function submitLog() {
-    if (!form.value.thesis_id || !form.value.date || !form.value.activity) return;
+    if (!form.value.thesis_id) return;
 
     submitting.value = true;
+    errors.value = {};
+
     router.post(route('mahasiswa.skripsi.store-log'), form.value, {
         preserveScroll: true,
         onSuccess: () => {
             form.value.date = '';
             form.value.activity = '';
             form.value.notes = '';
-            submitting.value = false;
         },
-        onError: () => {
-            submitting.value = false;
-        },
+        onError: (bag) => (errors.value = bag),
+        onFinish: () => (submitting.value = false),
     });
 }
 </script>
 
 <template>
     <AuthenticatedLayout>
-        <Head title="Skripsi" />
+        <Head title="TA/PA" />
 
-        <PageHeader title="Skripsi" subtitle="Tracking bimbingan skripsi Anda." />
+        <PageHeader
+            title="TA/PA"
+            subtitle="Status tugas akhir dan riwayat bimbingan Anda."
+            :breadcrumbs="['TA/PA', 'Bimbingan Online']"
+        />
 
-        <div v-if="!thesis" class="py-8">
-            <Card>
-                <EmptyState title="Belum ada skripsi" description="Anda belum memiliki data skripsi. Silakan hubungi admin." />
-            </Card>
-        </div>
+        <Card v-if="!thesis">
+            <EmptyState
+                title="Belum ada data TA/PA"
+                description="Anda belum terdaftar pada tugas akhir. Silakan hubungi admin program studi."
+            />
+        </Card>
 
         <template v-else>
-            <!-- Kartu Info -->
-            <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Card>
-                    <template #header>
-                        <h3 class="font-semibold text-content">Informasi Skripsi</h3>
-                    </template>
-                    <dl class="space-y-2 text-sm">
-                        <div class="flex justify-between">
-                            <dt class="text-muted">Judul</dt>
-                            <dd class="max-w-xs text-right font-medium text-content">{{ thesis.title }}</dd>
-                        </div>
-                        <div class="flex justify-between">
-                            <dt class="text-muted">Status</dt>
-                            <dd>
-                                <Badge :variant="statusVariant[thesis.status] || 'slate'">
-                                    {{ statusLabel[thesis.status] || thesis.status }}
-                                </Badge>
-                            </dd>
-                        </div>
-                        <div class="flex justify-between">
-                            <dt class="text-muted">Tanggal Pengajuan</dt>
-                            <dd class="font-medium text-content">{{ formatDate(thesis.submission_date) }}</dd>
-                        </div>
-                        <div class="flex justify-between">
-                            <dt class="text-muted">Pembimbing 1</dt>
-                            <dd class="font-medium text-content">{{ thesis.supervisor_one?.user?.name || '-' }}</dd>
-                        </div>
-                        <div class="flex justify-between">
-                            <dt class="text-muted">Pembimbing 2</dt>
-                            <dd class="font-medium text-content">{{ thesis.supervisor_two?.user?.name || '-' }}</dd>
-                        </div>
-                    </dl>
-                </Card>
-
-                <!-- Timeline -->
-                <Card>
-                    <template #header>
-                        <h3 class="font-semibold text-content">Timeline</h3>
-                    </template>
-                    <div class="space-y-3">
-                        <div v-for="(step, idx) in timelineSteps" :key="step" class="flex items-center gap-3">
-                            <div
-                                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold"
-                                :class="idx <= currentStepIndex() ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-400'"
-                            >
-                                {{ idx + 1 }}
-                            </div>
-                            <span
-                                class="text-sm"
-                                :class="idx <= currentStepIndex() ? 'font-medium text-content' : 'text-muted'"
-                            >
-                                {{ statusLabel[step] }}
-                            </span>
-                        </div>
+            <!-- Identitas TA/PA -->
+            <Card class="mb-5" accent="primary">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div class="min-w-0">
+                        <p class="text-xs font-medium uppercase tracking-wide text-muted">Judul Tugas Akhir</p>
+                        <h2 class="mt-1 text-lg font-semibold text-content">{{ thesis.title }}</h2>
+                        <p v-if="thesis.submission_date" class="mt-1 text-sm text-muted">
+                            Diajukan {{ formatDate(thesis.submission_date) }}
+                        </p>
                     </div>
-                </Card>
-            </div>
-
-            <!-- Abstrak -->
-            <Card class="mb-6">
-                <template #header>
-                    <h3 class="font-semibold text-content">Abstrak</h3>
-                </template>
-                <p class="text-sm text-muted">{{ thesis.abstract || 'Tidak ada abstrak.' }}</p>
-            </Card>
-
-            <!-- Log Bimbingan -->
-            <Card class="mb-6">
-                <template #header>
-                    <div>
-                        <h2 class="font-semibold text-content">Log Bimbingan</h2>
-                        <p class="text-sm text-muted">Riwayat bimbingan skripsi Anda.</p>
-                    </div>
-                </template>
-
-                <div v-if="logs.length === 0" class="py-4">
-                    <EmptyState title="Belum ada log" description="Belum ada catatan bimbingan." />
+                    <Badge :variant="statusVariant[thesis.status] ?? 'neutral'" dot>
+                        {{ statusLabel[thesis.status] ?? thesis.status }}
+                    </Badge>
                 </div>
 
-                <Table v-else :columns="columns" :rows="logs.map(l => ({
-                    date: formatDate(l.date),
-                    activity: l.activity,
-                    notes: l.notes || '-',
-                    approval: l.supervisor_approval,
-                }))">
-                    <template #cell-approval="{ row }">
-                        <Badge :variant="approvalBadgeVariant(row.approval)">
-                            {{ approvalLabel(row.approval) }}
-                        </Badge>
+                <dl class="mt-5 grid grid-cols-1 gap-4 border-t border-border pt-4 sm:grid-cols-2">
+                    <div>
+                        <dt class="text-xs text-muted">Pembimbing 1</dt>
+                        <dd class="mt-0.5 text-sm font-medium text-content">
+                            {{ thesis.supervisor_one?.user?.name || '—' }}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs text-muted">Pembimbing 2</dt>
+                        <dd class="mt-0.5 text-sm font-medium text-content">
+                            {{ thesis.supervisor_two?.user?.name || '—' }}
+                        </dd>
+                    </div>
+                </dl>
+            </Card>
+
+            <Tabs v-model="activeTab" :tabs="tabs" class="mb-5" />
+
+            <!-- Tab: Status -->
+            <template v-if="activeTab === 'status'">
+                <Card class="mb-5">
+                    <template #header>
+                        <h3 class="font-semibold text-content">Tahapan</h3>
                     </template>
-                </Table>
-            </Card>
+                    <Stepper :steps="steps" :current="currentStep" />
+                </Card>
 
-            <!-- Form Tambah Log -->
-            <Card>
-                <template #header>
-                    <h3 class="font-semibold text-content">Tambah Log Bimbingan</h3>
-                </template>
-                <form @submit.prevent="submitLog" class="space-y-4">
-                    <input type="hidden" v-model="form.thesis_id" />
+                <Card>
+                    <template #header>
+                        <h3 class="font-semibold text-content">Abstrak</h3>
+                    </template>
+                    <p class="text-sm leading-relaxed text-muted">{{ thesis.abstract || 'Belum ada abstrak.' }}</p>
+                </Card>
+            </template>
 
-                    <div>
-                        <label class="block text-sm font-medium text-content">Tanggal</label>
-                        <input
-                            v-model="form.date"
-                            type="date"
-                            required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:w-64"
-                        />
-                    </div>
+            <!-- Tab: Bimbingan Online -->
+            <template v-else>
+                <Card class="mb-5">
+                    <template #header>
+                        <div>
+                            <h3 class="font-semibold text-content">Riwayat Bimbingan</h3>
+                            <p class="mt-0.5 text-sm text-muted">Catatan bimbingan yang sudah Anda ajukan.</p>
+                        </div>
+                    </template>
 
-                    <div>
-                        <label class="block text-sm font-medium text-content">Aktivitas</label>
-                        <input
-                            v-model="form.activity"
-                            type="text"
-                            required
-                            maxlength="255"
-                            placeholder="Misal: Bimbingan bab 1"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        />
-                    </div>
+                    <DataTable :columns="columns" :rows="rows" empty-text="Belum ada catatan bimbingan.">
+                        <template #cell-approval="{ row }">
+                            <Badge :variant="row.approval ? 'success' : 'warning'" dot>
+                                {{ row.approval ? 'Disetujui' : 'Menunggu' }}
+                            </Badge>
+                        </template>
+                    </DataTable>
+                </Card>
 
-                    <div>
-                        <label class="block text-sm font-medium text-content">Catatan <span class="text-muted">(opsional)</span></label>
-                        <textarea
+                <Card>
+                    <template #header>
+                        <h3 class="font-semibold text-content">Tambah Catatan Bimbingan</h3>
+                    </template>
+
+                    <form class="space-y-4" @submit.prevent="submitLog">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <Input
+                                v-model="form.date"
+                                label="Tanggal"
+                                type="date"
+                                required
+                                :error="errors.date"
+                            />
+                            <Input
+                                v-model="form.activity"
+                                label="Aktivitas"
+                                placeholder="Misal: Bimbingan bab 1"
+                                required
+                                :error="errors.activity"
+                            />
+                        </div>
+
+                        <Textarea
                             v-model="form.notes"
-                            maxlength="1000"
-                            rows="3"
-                            placeholder="Catatan bimbingan..."
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        ></textarea>
-                    </div>
+                            label="Catatan"
+                            hint="Opsional"
+                            :rows="3"
+                            :maxlength="1000"
+                            placeholder="Catatan bimbingan…"
+                            :error="errors.notes"
+                        />
 
-                    <div class="flex justify-end">
-                        <button
-                            type="submit"
-                            :disabled="submitting"
-                            class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
-                        >
-                            {{ submitting ? 'Menyimpan...' : 'Simpan Log' }}
-                        </button>
-                    </div>
-                </form>
-            </Card>
+                        <div class="flex justify-end">
+                            <Button type="submit" :loading="submitting" class="w-full sm:w-auto">
+                                {{ submitting ? 'Menyimpan…' : 'Simpan Catatan' }}
+                            </Button>
+                        </div>
+                    </form>
+                </Card>
+            </template>
         </template>
     </AuthenticatedLayout>
 </template>

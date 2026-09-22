@@ -175,7 +175,7 @@ function submitLog() {
                             v-model="form.date"
                             type="date"
                             required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:w-64"
+                            class="mt-1 block w-full rounded-md border-border-strong shadow-sm focus:border-primary focus:ring-focus sm:w-64"
                         />
                     </div>
 
@@ -187,7 +187,7 @@ function submitLog() {
                             required
                             maxlength="255"
                             placeholder="Misal: Mempelajari arsitektur sistem"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            class="mt-1 block w-full rounded-md border-border-strong shadow-sm focus:border-primary focus:ring-focus"
                         />
                     </div>
 
@@ -198,7 +198,7 @@ function submitLog() {
                             maxlength="1000"
                             rows="3"
                             placeholder="Catatan kegiatan..."
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            class="mt-1 block w-full rounded-md border-border-strong shadow-sm focus:border-primary focus:ring-focus"
                         ></textarea>
                     </div>
 
@@ -206,7 +206,7 @@ function submitLog() {
                         <button
                             type="submit"
                             :disabled="submitting"
-                            class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+                            class="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:bg-primary disabled:opacity-50"
                         >
                             {{ submitting ? 'Menyimpan...' : 'Simpan Logbook' }}
                         </button>

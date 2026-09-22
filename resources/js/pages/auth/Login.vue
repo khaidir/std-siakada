@@ -33,19 +33,19 @@ function submit() {
         <Card class="w-full max-w-md">
             <template #header>
                 <div class="text-center">
-                    <h1 class="text-2xl font-semibold text-slate-900">SIAKAD</h1>
-                    <p class="mt-1 text-sm text-slate-500">Sistem Informasi Akademik</p>
+                    <h1 class="text-2xl font-semibold text-content">SIAKAD</h1>
+                    <p class="mt-1 text-sm text-muted">Sistem Informasi Akademik</p>
                 </div>
             </template>
 
             <form @submit.prevent="submit" class="space-y-4">
-                <div v-if="status" class="rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+                <div v-if="status" class="rounded-md bg-success-subtle p-3 text-sm text-success-strong">
                     {{ status }}
                 </div>
 
                 <div
                     v-if="page.props.flash?.error"
-                    class="rounded-md bg-rose-50 p-3 text-sm text-rose-700"
+                    class="rounded-md bg-danger-subtle p-3 text-sm text-danger-strong"
                 >
                     {{ page.props.flash.error }}
                 </div>
@@ -69,8 +69,8 @@ function submit() {
                     required
                 />
 
-                <label class="flex items-center gap-2 text-sm text-slate-600">
-                    <input v-model="form.remember" type="checkbox" class="rounded border-slate-300" />
+                <label class="flex items-center gap-2 text-sm text-muted">
+                    <input v-model="form.remember" type="checkbox" class="rounded border-border-strong" />
                     Ingat saya
                 </label>
 

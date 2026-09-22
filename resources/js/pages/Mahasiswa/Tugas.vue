@@ -92,11 +92,11 @@ function statusLabel(assignment) {
 
         <PageHeader title="Tugas" subtitle="Kumpulkan tugas perkuliahan dari kelas yang Anda ikuti." />
 
-        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-success-subtle p-3 text-sm text-success-strong">
             {{ page.props.flash.success }}
         </div>
 
-        <div v-if="page.props.errors?.length" class="mb-4 rounded-md bg-rose-50 p-3 text-sm text-rose-700">
+        <div v-if="page.props.errors?.length" class="mb-4 rounded-md bg-danger-subtle p-3 text-sm text-danger-strong">
             <p v-for="(err, i) in page.props.errors" :key="i">{{ err }}</p>
         </div>
 
@@ -137,15 +137,15 @@ function statusLabel(assignment) {
                         </div>
 
                         <!-- Info submission -->
-                        <div v-if="assignment.submission" class="mt-3 rounded-md bg-emerald-50 p-3 text-sm">
-                            <p class="font-medium text-emerald-800">✅ Telah dikumpulkan</p>
-                            <p class="mt-1 text-emerald-600">
+                        <div v-if="assignment.submission" class="mt-3 rounded-md bg-success-subtle p-3 text-sm">
+                            <p class="font-medium text-success-strong">✅ Telah dikumpulkan</p>
+                            <p class="mt-1 text-success-strong">
                                 {{ formatDate(assignment.submission.submitted_at) }}
                             </p>
                             <div v-if="assignment.submission.score !== null" class="mt-2">
-                                <span class="font-medium text-emerald-800">Nilai: {{ assignment.submission.score }}</span>
+                                <span class="font-medium text-success-strong">Nilai: {{ assignment.submission.score }}</span>
                             </div>
-                            <p v-if="assignment.submission.feedback" class="mt-1 text-emerald-600">
+                            <p v-if="assignment.submission.feedback" class="mt-1 text-success-strong">
                                 Feedback: {{ assignment.submission.feedback }}
                             </p>
                         </div>
@@ -196,7 +196,7 @@ function statusLabel(assignment) {
                     <input
                         type="file"
                         accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.jpg,.jpeg,.png"
-                        class="mt-1 block w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-content file:mr-3 file:rounded file:border-0 file:bg-indigo-50 file:px-3 file:py-1 file:text-sm file:font-medium file:text-indigo-700 hover:file:bg-indigo-100"
+                        class="mt-1 block w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-content file:mr-3 file:rounded file:border-0 file:bg-primary-subtle file:px-3 file:py-1 file:text-sm file:font-medium file:text-primary-strong hover:file:bg-primary-subtle"
                         @change="onFileChange"
                     />
                     <p class="mt-1 text-xs text-muted">
@@ -204,7 +204,7 @@ function statusLabel(assignment) {
                     </p>
                 </div>
 
-                <div v-if="selectedFile" class="rounded-md bg-slate-50 p-3 text-sm text-content">
+                <div v-if="selectedFile" class="rounded-md bg-neutral-subtle p-3 text-sm text-content">
                     📎 {{ selectedFile.name }} ({{ (selectedFile.size / 1024).toFixed(1) }} KB)
                 </div>
             </div>

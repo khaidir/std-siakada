@@ -140,7 +140,7 @@ function formatPercentage(value) {
                     :key="tab.key"
                     class="border-b-2 px-1 py-3 text-sm font-medium transition-colors"
                     :class="activeTab === tab.key
-                        ? 'border-indigo-600 text-indigo-600'
+                        ? 'border-primary text-primary-strong'
                         : 'border-transparent text-muted hover:text-content'"
                     @click="switchTab(tab.key)"
                 >

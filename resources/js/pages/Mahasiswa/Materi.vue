@@ -80,7 +80,7 @@ function formatDate(value) {
                             v-if="material.file_url"
                             :href="material.file_url"
                             target="_blank"
-                            class="inline-flex items-center gap-1 rounded-md bg-indigo-50 px-3 py-1.5 text-sm font-medium text-indigo-700 hover:bg-indigo-100"
+                            class="inline-flex items-center gap-1 rounded-md bg-primary-subtle px-3 py-1.5 text-sm font-medium text-primary-strong hover:bg-primary-subtle"
                         >
                             📎 Unduh
                         </a>

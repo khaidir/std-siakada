@@ -132,11 +132,11 @@ function save() {
 
         <PageHeader title="Input Nilai" subtitle="Kelola nilai mahasiswa pada kelas yang Anda ampu." />
 
-        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-success-subtle p-3 text-sm text-success-strong">
             {{ page.props.flash.success }}
         </div>
 
-        <div v-if="form.hasErrors" class="mb-4 rounded-md bg-rose-50 p-3 text-sm text-rose-700">
+        <div v-if="form.hasErrors" class="mb-4 rounded-md bg-danger-subtle p-3 text-sm text-danger-strong">
             <p v-if="form.errors.grades">{{ form.errors.grades }}</p>
             <p v-else>Periksa kembali input nilai. Pastikan setiap mahasiswa memiliki komponen nilai atau skor akhir (0–100).</p>
         </div>
@@ -197,7 +197,7 @@ function save() {
                                     max="100"
                                     step="0.01"
                                     placeholder="—"
-                                    class="w-20 rounded-md border border-slate-300 px-2 py-1.5 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    class="w-20 rounded-md border border-border-strong px-2 py-1.5 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-focus"
                                 />
                             </td>
                             <td class="px-3 py-2">
@@ -208,7 +208,7 @@ function save() {
                                     max="100"
                                     step="0.01"
                                     placeholder="—"
-                                    class="w-20 rounded-md border border-slate-300 px-2 py-1.5 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    class="w-20 rounded-md border border-border-strong px-2 py-1.5 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-focus"
                                 />
                             </td>
                             <td class="px-3 py-2">
@@ -219,7 +219,7 @@ function save() {
                                     max="100"
                                     step="0.01"
                                     placeholder="—"
-                                    class="w-20 rounded-md border border-slate-300 px-2 py-1.5 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    class="w-20 rounded-md border border-border-strong px-2 py-1.5 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-focus"
                                 />
                             </td>
                             <td class="px-3 py-2">
@@ -231,7 +231,7 @@ function save() {
                                         max="100"
                                         step="0.01"
                                         placeholder="Otomatis"
-                                        class="w-24 rounded-md border border-slate-300 px-2 py-1.5 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        class="w-24 rounded-md border border-border-strong px-2 py-1.5 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-focus"
                                     />
                                     <span v-if="preview(row).score !== null" class="text-xs text-muted">
                                         ≈ {{ preview(row).score }}

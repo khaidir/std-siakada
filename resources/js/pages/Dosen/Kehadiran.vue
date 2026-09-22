@@ -81,11 +81,11 @@ const formatTime = (time) => {
 
         <PageHeader title="Kehadiran Mengajar" subtitle="Check-in / Check-out kehadiran mengajar per pertemuan." />
 
-        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-success-subtle p-3 text-sm text-success-strong">
             {{ page.props.flash.success }}
         </div>
 
-        <div v-if="checkInForm.hasErrors" class="mb-4 rounded-md bg-rose-50 p-3 text-sm text-rose-700">
+        <div v-if="checkInForm.hasErrors" class="mb-4 rounded-md bg-danger-subtle p-3 text-sm text-danger-strong">
             <p v-if="checkInForm.errors.course_offering_id">{{ checkInForm.errors.course_offering_id }}</p>
             <p v-else-if="checkInForm.errors.date">{{ checkInForm.errors.date }}</p>
             <p v-else>Periksa kembali input.</p>

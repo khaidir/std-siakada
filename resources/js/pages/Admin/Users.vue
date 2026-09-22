@@ -168,11 +168,11 @@ function roleLabel(role) {
 
         <PageHeader title="Pengguna" subtitle="Kelola pengguna, role, dan akses sistem." />
 
-        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-success-subtle p-3 text-sm text-success-strong">
             {{ page.props.flash.success }}
         </div>
 
-        <div v-if="page.props.errors?.length" class="mb-4 rounded-md bg-rose-50 p-3 text-sm text-rose-700">
+        <div v-if="page.props.errors?.length" class="mb-4 rounded-md bg-danger-subtle p-3 text-sm text-danger-strong">
             <p v-for="(err, i) in page.props.errors" :key="i">{{ err }}</p>
         </div>
 

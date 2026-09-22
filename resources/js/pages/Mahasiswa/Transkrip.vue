@@ -79,7 +79,7 @@ function gradeBadgeVariant(letter) {
                 <template #header>
                     <h3 class="text-sm font-medium text-muted">IP Kumulatif (IPK)</h3>
                 </template>
-                <p class="text-3xl font-bold text-emerald-600">{{ ipk.toFixed(2) }}</p>
+                <p class="text-3xl font-bold text-success-strong">{{ ipk.toFixed(2) }}</p>
             </Card>
             <Card>
                 <template #header>

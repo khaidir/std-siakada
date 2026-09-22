@@ -39,10 +39,10 @@ function gradeBadgeVariant(letter) {
 }
 
 const gpaColor = computed(() => {
-    if (props.gpa >= 3.5) return 'text-emerald-600';
-    if (props.gpa >= 2.75) return 'text-blue-600';
-    if (props.gpa >= 2.0) return 'text-amber-600';
-    return 'text-rose-600';
+    if (props.gpa >= 3.5) return 'text-success-strong';
+    if (props.gpa >= 2.75) return 'text-info-strong';
+    if (props.gpa >= 2.0) return 'text-warning-strong';
+    return 'text-danger-strong';
 });
 </script>
 

@@ -58,10 +58,10 @@ const statusLabel = (status) => {
 
 const summaryCards = computed(() => [
     { label: 'Total', value: props.summary.total, color: 'text-content' },
-    { label: 'Draft', value: props.summary.draft, color: 'text-gray-500' },
-    { label: 'Submitted', value: props.summary.submitted, color: 'text-indigo-600' },
-    { label: 'Disetujui', value: props.summary.approved, color: 'text-emerald-600' },
-    { label: 'Ditolak', value: props.summary.rejected, color: 'text-rose-600' },
+    { label: 'Draft', value: props.summary.draft, color: 'text-muted' },
+    { label: 'Submitted', value: props.summary.submitted, color: 'text-primary-strong' },
+    { label: 'Disetujui', value: props.summary.approved, color: 'text-success-strong' },
+    { label: 'Ditolak', value: props.summary.rejected, color: 'text-danger-strong' },
 ]);
 </script>
 
@@ -144,7 +144,7 @@ const summaryCards = computed(() => [
                             <td class="px-3 py-2">
                                 <Link
                                     :href="route('admin.krs-monitoring.show', plan.id)"
-                                    class="text-sm text-indigo-600 hover:underline"
+                                    class="text-sm text-primary-strong hover:underline"
                                 >
                                     Detail
                                 </Link>

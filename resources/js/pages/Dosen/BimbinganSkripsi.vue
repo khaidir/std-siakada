@@ -11,13 +11,13 @@ const props = defineProps({
 
 const statusBadge = (status) => {
     const map = {
-        proposal: 'bg-blue-100 text-blue-700',
-        seminar_proposal: 'bg-amber-100 text-amber-700',
-        sidang: 'bg-purple-100 text-purple-700',
-        lulus: 'bg-emerald-100 text-emerald-700',
-        revisi: 'bg-rose-100 text-rose-700',
+        proposal: 'bg-info-subtle text-info-strong',
+        seminar_proposal: 'bg-warning-subtle text-warning-strong',
+        sidang: 'bg-primary-subtle text-primary-strong',
+        lulus: 'bg-success-subtle text-success-strong',
+        revisi: 'bg-danger-subtle text-danger-strong',
     };
-    return map[status] || 'bg-gray-100 text-gray-700';
+    return map[status] || 'bg-neutral-subtle text-content';
 };
 
 const statusLabel = (status) => {
@@ -36,42 +36,42 @@ const statusLabel = (status) => {
     <AuthenticatedLayout title="Bimbingan Skripsi">
         <template #header>
             <div class="flex items-center justify-between">
-                <h1 class="text-xl font-semibold text-gray-900">Bimbingan Skripsi</h1>
+                <h1 class="text-xl font-semibold text-content">Bimbingan Skripsi</h1>
             </div>
         </template>
 
         <div class="py-6">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <!-- Flash Message -->
-                <div v-if="$page.props.flash?.success" class="mb-4 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700">
+                <div v-if="$page.props.flash?.success" class="mb-4 rounded-lg bg-success-subtle p-4 text-sm text-success-strong">
                     {{ $page.props.flash.success }}
                 </div>
 
                 <!-- Table -->
                 <div class="overflow-hidden rounded-lg bg-white shadow">
-                    <div v-if="theses.length === 0" class="p-6 text-center text-sm text-gray-500">
+                    <div v-if="theses.length === 0" class="p-6 text-center text-sm text-muted">
                         Belum ada mahasiswa bimbingan skripsi.
                     </div>
 
-                    <table v-else class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                    <table v-else class="min-w-full divide-y divide-border">
+                        <thead class="bg-neutral-subtle">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Mahasiswa</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">NIM</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Judul</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Aksi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted">Mahasiswa</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted">NIM</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted">Judul</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr v-for="thesis in theses" :key="thesis.id" class="hover:bg-gray-50">
-                                <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                        <tbody class="divide-y divide-border">
+                            <tr v-for="thesis in theses" :key="thesis.id" class="hover:bg-neutral-subtle">
+                                <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-content">
                                     {{ thesis.student?.name }}
                                 </td>
-                                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
+                                <td class="whitespace-nowrap px-6 py-4 text-sm text-muted">
                                     {{ thesis.student?.nim }}
                                 </td>
-                                <td class="max-w-xs truncate px-6 py-4 text-sm text-gray-600">
+                                <td class="max-w-xs truncate px-6 py-4 text-sm text-muted">
                                     {{ thesis.title }}
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
@@ -82,7 +82,7 @@ const statusLabel = (status) => {
                                 <td class="whitespace-nowrap px-6 py-4 text-sm">
                                     <Link
                                         :href="route('dosen.bimbingan-skripsi.show', thesis.id)"
-                                        class="font-medium text-indigo-600 hover:text-indigo-900"
+                                        class="font-medium text-primary-strong hover:text-primary-strong"
                                     >
                                         Detail
                                     </Link>

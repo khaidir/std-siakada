@@ -57,9 +57,9 @@ const sksPercentage = computed(() => {
 });
 
 const sksBarColor = computed(() => {
-    if (sksPercentage.value >= 90) return 'bg-rose-500';
-    if (sksPercentage.value >= 75) return 'bg-amber-500';
-    return 'bg-emerald-500';
+    if (sksPercentage.value >= 90) return 'bg-danger';
+    if (sksPercentage.value >= 75) return 'bg-warning';
+    return 'bg-success';
 });
 
 function addCourse(offeringId) {
@@ -126,11 +126,11 @@ function statusLabel(status) {
 
         <PageHeader title="Kartu Rencana Studi" subtitle="Pilih mata kuliah yang akan diambil semester ini." />
 
-        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-success-subtle p-3 text-sm text-success-strong">
             {{ page.props.flash.success }}
         </div>
 
-        <div v-if="page.props.errors?.length" class="mb-4 rounded-md bg-rose-50 p-3 text-sm text-rose-700">
+        <div v-if="page.props.errors?.length" class="mb-4 rounded-md bg-danger-subtle p-3 text-sm text-danger-strong">
             <p v-for="(err, i) in page.props.errors" :key="i">{{ err }}</p>
         </div>
 
@@ -171,7 +171,7 @@ function statusLabel(status) {
                     </span>
                 </div>
             </template>
-            <div class="h-3 w-full overflow-hidden rounded-full bg-slate-200">
+            <div class="h-3 w-full overflow-hidden rounded-full bg-neutral-subtle">
                 <div
                     class="h-full rounded-full transition-all duration-300"
                     :class="sksBarColor"

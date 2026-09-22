@@ -1,34 +1,40 @@
 <?php
 
-use App\Http\Controllers\Admin\KrsMonitoringController;
-use App\Http\Controllers\Admin\LecturerAttendanceController as AdminLecturerAttendanceController;
-use App\Http\Controllers\Admin\ThesisController as AdminThesisController;
-use App\Http\Controllers\Admin\InternshipController as AdminInternshipController;
 use App\Http\Controllers\Admin\AcademicPeriodController;
 use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\ClassroomController;
 use App\Http\Controllers\Admin\CourseController as AdminCourseController;
 use App\Http\Controllers\Admin\CourseOfferingController;
 use App\Http\Controllers\Admin\FacultyController;
+use App\Http\Controllers\Admin\InternshipController as AdminInternshipController;
+use App\Http\Controllers\Admin\KrsMonitoringController;
+use App\Http\Controllers\Admin\LecturerAttendanceController as AdminLecturerAttendanceController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StudyProgramController;
+use App\Http\Controllers\Admin\ThesisController as AdminThesisController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Dosen\AssignmentController;
-use App\Http\Controllers\Dosen\SubmissionGradeController;
 use App\Http\Controllers\Dosen\AttendanceController;
 use App\Http\Controllers\Dosen\GradeController;
+use App\Http\Controllers\Dosen\KrsApprovalController;
+use App\Http\Controllers\Dosen\LecturerAttendanceController;
 use App\Http\Controllers\Dosen\MaterialController;
+use App\Http\Controllers\Dosen\SubmissionGradeController;
+use App\Http\Controllers\Dosen\ThesisController;
 use App\Http\Controllers\Kaprodi\CourseController as KaprodiCourseController;
 use App\Http\Controllers\Kaprodi\LecturerAttendanceController as KaprodiLecturerAttendanceController;
-use App\Http\Controllers\Pimpinan\DashboardController as PimpinanDashboardController;
-use App\Http\Controllers\Pimpinan\ReportController as PimpinanReportController;
 use App\Http\Controllers\Mahasiswa\AssignmentController as MahasiswaAssignmentController;
 use App\Http\Controllers\Mahasiswa\GradeController as MahasiswaGradeController;
+use App\Http\Controllers\Mahasiswa\InternshipController;
 use App\Http\Controllers\Mahasiswa\KhsController;
-use App\Http\Controllers\Mahasiswa\TranskripController;
 use App\Http\Controllers\Mahasiswa\KrsController;
 use App\Http\Controllers\Mahasiswa\MaterialController as MahasiswaMaterialController;
+use App\Http\Controllers\Mahasiswa\PresenceController;
+use App\Http\Controllers\Mahasiswa\ProfileController;
+use App\Http\Controllers\Mahasiswa\ScheduleController;
+use App\Http\Controllers\Mahasiswa\TranskripController;
+use App\Http\Controllers\Pimpinan\ReportController as PimpinanReportController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -179,23 +185,23 @@ Route::middleware(['auth', 'role:dosen', 'permission:assignment.manage'])->group
 });
 
 Route::middleware(['auth', 'role:dosen', 'permission:lecturer-attendance.manage'])->group(function () {
-    Route::get('/dosen/kehadiran', [\App\Http\Controllers\Dosen\LecturerAttendanceController::class, 'index'])->name('dosen.kehadiran.index');
-    Route::post('/dosen/kehadiran/check-in', [\App\Http\Controllers\Dosen\LecturerAttendanceController::class, 'checkIn'])->name('dosen.kehadiran.check-in');
-    Route::post('/dosen/kehadiran/{id}/check-out', [\App\Http\Controllers\Dosen\LecturerAttendanceController::class, 'checkOut'])->name('dosen.kehadiran.check-out');
+    Route::get('/dosen/kehadiran', [LecturerAttendanceController::class, 'index'])->name('dosen.kehadiran.index');
+    Route::post('/dosen/kehadiran/check-in', [LecturerAttendanceController::class, 'checkIn'])->name('dosen.kehadiran.check-in');
+    Route::post('/dosen/kehadiran/{id}/check-out', [LecturerAttendanceController::class, 'checkOut'])->name('dosen.kehadiran.check-out');
 });
 
 Route::middleware(['auth', 'role:dosen', 'permission:krs.approve'])->group(function () {
-    Route::get('/dosen/bimbingan-pa', [\App\Http\Controllers\Dosen\KrsApprovalController::class, 'index'])->name('dosen.bimbingan-pa.index');
-    Route::get('/dosen/bimbingan-pa/{id}', [\App\Http\Controllers\Dosen\KrsApprovalController::class, 'show'])->name('dosen.bimbingan-pa.show');
-    Route::post('/dosen/bimbingan-pa/{id}/approve', [\App\Http\Controllers\Dosen\KrsApprovalController::class, 'approve'])->name('dosen.bimbingan-pa.approve');
-    Route::post('/dosen/bimbingan-pa/{id}/reject', [\App\Http\Controllers\Dosen\KrsApprovalController::class, 'reject'])->name('dosen.bimbingan-pa.reject');
+    Route::get('/dosen/bimbingan-pa', [KrsApprovalController::class, 'index'])->name('dosen.bimbingan-pa.index');
+    Route::get('/dosen/bimbingan-pa/{id}', [KrsApprovalController::class, 'show'])->name('dosen.bimbingan-pa.show');
+    Route::post('/dosen/bimbingan-pa/{id}/approve', [KrsApprovalController::class, 'approve'])->name('dosen.bimbingan-pa.approve');
+    Route::post('/dosen/bimbingan-pa/{id}/reject', [KrsApprovalController::class, 'reject'])->name('dosen.bimbingan-pa.reject');
 });
 
 Route::middleware(['auth', 'role:dosen', 'permission:thesis.view'])->group(function () {
-    Route::get('/dosen/bimbingan-skripsi', [\App\Http\Controllers\Dosen\ThesisController::class, 'index'])->name('dosen.bimbingan-skripsi.index');
-    Route::get('/dosen/bimbingan-skripsi/{id}', [\App\Http\Controllers\Dosen\ThesisController::class, 'show'])->name('dosen.bimbingan-skripsi.show');
-    Route::put('/dosen/bimbingan-skripsi/{id}/status', [\App\Http\Controllers\Dosen\ThesisController::class, 'updateStatus'])->name('dosen.bimbingan-skripsi.update-status');
-    Route::post('/dosen/bimbingan-skripsi/{id}/approve-log', [\App\Http\Controllers\Dosen\ThesisController::class, 'approveLog'])->name('dosen.bimbingan-skripsi.approve-log');
+    Route::get('/dosen/bimbingan-skripsi', [ThesisController::class, 'index'])->name('dosen.bimbingan-skripsi.index');
+    Route::get('/dosen/bimbingan-skripsi/{id}', [ThesisController::class, 'show'])->name('dosen.bimbingan-skripsi.show');
+    Route::put('/dosen/bimbingan-skripsi/{id}/status', [ThesisController::class, 'updateStatus'])->name('dosen.bimbingan-skripsi.update-status');
+    Route::post('/dosen/bimbingan-skripsi/{id}/approve-log', [ThesisController::class, 'approveLog'])->name('dosen.bimbingan-skripsi.approve-log');
 });
 
 Route::middleware(['auth', 'role:mahasiswa', 'permission:dashboard.view'])->group(function () {
@@ -225,18 +231,24 @@ Route::middleware(['auth', 'role:mahasiswa', 'permission:grades.view'])->group(f
 });
 
 Route::middleware(['auth', 'role:mahasiswa', 'permission:schedule.view'])->group(function () {
-    Route::get('/mahasiswa/jadwal', [\App\Http\Controllers\Mahasiswa\ScheduleController::class, 'index'])->name('mahasiswa.jadwal.index');
-    Route::get('/mahasiswa/presensi', [\App\Http\Controllers\Mahasiswa\PresenceController::class, 'index'])->name('mahasiswa.presensi.index');
+    Route::get('/mahasiswa/jadwal', [ScheduleController::class, 'index'])->name('mahasiswa.jadwal.index');
+    Route::get('/mahasiswa/presensi', [PresenceController::class, 'index'])->name('mahasiswa.presensi.index');
 });
 
 Route::middleware(['auth', 'role:mahasiswa', 'permission:thesis.view'])->group(function () {
-    Route::get('/mahasiswa/skripsi', [\App\Http\Controllers\Mahasiswa\ThesisController::class, 'index'])->name('mahasiswa.skripsi.index');
-    Route::post('/mahasiswa/skripsi/log', [\App\Http\Controllers\Mahasiswa\ThesisController::class, 'storeLog'])->name('mahasiswa.skripsi.store-log');
+    Route::get('/mahasiswa/skripsi', [App\Http\Controllers\Mahasiswa\ThesisController::class, 'index'])->name('mahasiswa.skripsi.index');
+    Route::post('/mahasiswa/skripsi/log', [App\Http\Controllers\Mahasiswa\ThesisController::class, 'storeLog'])->name('mahasiswa.skripsi.store-log');
+});
+
+// Setiap mahasiswa boleh mengelola profilnya sendiri, jadi tidak perlu permission khusus.
+Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
+    Route::get('/mahasiswa/profil', [ProfileController::class, 'index'])->name('mahasiswa.profil.index');
+    Route::put('/mahasiswa/profil', [ProfileController::class, 'update'])->name('mahasiswa.profil.update');
 });
 
 Route::middleware(['auth', 'role:mahasiswa', 'permission:internship.view'])->group(function () {
-    Route::get('/mahasiswa/kp', [\App\Http\Controllers\Mahasiswa\InternshipController::class, 'index'])->name('mahasiswa.kp.index');
-    Route::post('/mahasiswa/kp/log', [\App\Http\Controllers\Mahasiswa\InternshipController::class, 'storeLog'])->name('mahasiswa.kp.store-log');
+    Route::get('/mahasiswa/kp', [InternshipController::class, 'index'])->name('mahasiswa.kp.index');
+    Route::post('/mahasiswa/kp/log', [InternshipController::class, 'storeLog'])->name('mahasiswa.kp.store-log');
 });
 
 Route::middleware(['auth', 'role:pimpinan', 'permission:dashboard.view'])->group(function () {

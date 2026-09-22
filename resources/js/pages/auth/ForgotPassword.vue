@@ -21,12 +21,12 @@ function submit() {
         <Card class="w-full max-w-md">
             <template #header>
                 <div class="text-center">
-                    <h1 class="text-2xl font-semibold text-slate-900">Lupa Kata Sandi</h1>
-                    <p class="mt-1 text-sm text-slate-500">Masukkan email untuk menerima tautan reset.</p>
+                    <h1 class="text-2xl font-semibold text-content">Lupa Kata Sandi</h1>
+                    <p class="mt-1 text-sm text-muted">Masukkan email untuk menerima tautan reset.</p>
                 </div>
             </template>
             <form @submit.prevent="submit" class="space-y-4">
-                <div v-if="status" class="rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">{{ status }}</div>
+                <div v-if="status" class="rounded-md bg-success-subtle p-3 text-sm text-success-strong">{{ status }}</div>
                 <Input v-model="form.email" type="email" label="Email" :error="form.errors.email" required />
                 <Button type="submit" variant="primary" class="w-full" :disabled="form.processing">Kirim Tautan</Button>
             </form>

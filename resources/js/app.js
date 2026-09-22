@@ -2,16 +2,30 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from 'ziggy-js';
 
+/*
+ * Glob dibiarkan lazy (tanpa `eager`), sehingga setiap halaman menjadi chunk
+ * tersendiri dan hanya diunduh saat dibuka. Dengan `eager: true` seluruh
+ * halaman — termasuk Chart.js yang hanya dipakai dashboard — ikut masuk ke
+ * bundle awal.
+ */
+const pages = import.meta.glob('./pages/**/*.vue');
+
 createInertiaApp({
     title: (title) => (title ? `${title} — SIAKAD` : 'SIAKAD'),
     resolve: (name) => {
-        const pages = import.meta.glob('./pages/**/*.vue', { eager: true });
-        // Case-insensitive lookup: Vite glob preserves filesystem casing
-        // but Inertia page names from controller are lowercase
-        const key = Object.keys(pages).find(k =>
-            k.replace(/^\.\/pages\//, '').replace(/\.vue$/, '').toLowerCase() === name.toLowerCase()
-        );
-        return key ? pages[key] : pages[`./pages/${name}.vue`];
+        // Nama halaman dari controller bisa berbeda kapitalisasi dengan nama file.
+        const key =
+            Object.keys(pages).find(
+                (k) => k.replace(/^\.\/pages\//, '').replace(/\.vue$/, '').toLowerCase() === name.toLowerCase(),
+            ) ?? `./pages/${name}.vue`;
+
+        const loader = pages[key];
+
+        if (!loader) {
+            throw new Error(`Halaman Inertia tidak ditemukan: ${name}`);
+        }
+
+        return loader();
     },
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
@@ -20,7 +34,6 @@ createInertiaApp({
             .mount(el);
     },
     progress: {
-        color: '#4f46e5',
+        color: '#c82333',
     },
 });
-

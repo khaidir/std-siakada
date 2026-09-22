@@ -110,7 +110,7 @@ function groupLabel(group) {
 
         <PageHeader title="Roles & Permissions" subtitle="Kelola mapping role dan permission akses." />
 
-        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-success-subtle p-3 text-sm text-success-strong">
             {{ page.props.flash.success }}
         </div>
 
@@ -155,8 +155,8 @@ function groupLabel(group) {
                                 :key="perm"
                                 class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs transition-colors"
                                 :class="isSelected(perm)
-                                    ? 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                                    : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400'"
+                                    ? 'border-info bg-info-subtle text-info-strong'
+                                    : 'border-border bg-white text-muted hover:border-border-strong'"
                                 @click="togglePermission(perm)"
                             >
                                 <input

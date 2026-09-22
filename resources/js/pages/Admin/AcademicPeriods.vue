@@ -188,7 +188,7 @@ function semesterTypeLabel(type) {
 
         <PageHeader title="Periode Akademik" subtitle="Kelola tahun ajaran dan semester." />
 
-        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-success-subtle p-3 text-sm text-success-strong">
             {{ page.props.flash.success }}
         </div>
 
@@ -254,7 +254,7 @@ function semesterTypeLabel(type) {
                     <Input v-model="ayForm.end_date" label="Tanggal Selesai" type="date" required />
                 </div>
                 <label class="flex items-center gap-2 text-sm">
-                    <input v-model="ayForm.is_active" type="checkbox" class="rounded border-gray-300" />
+                    <input v-model="ayForm.is_active" type="checkbox" class="rounded border-border-strong" />
                     Aktifkan sebagai tahun ajaran berjalan
                 </label>
             </div>
@@ -278,7 +278,7 @@ function semesterTypeLabel(type) {
                     <Input v-model="semForm.end_date" label="Tanggal Selesai" type="date" required />
                 </div>
                 <label class="flex items-center gap-2 text-sm">
-                    <input v-model="semForm.is_active" type="checkbox" class="rounded border-gray-300" />
+                    <input v-model="semForm.is_active" type="checkbox" class="rounded border-border-strong" />
                     Aktifkan sebagai semester berjalan
                 </label>
             </div>

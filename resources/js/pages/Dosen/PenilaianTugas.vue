@@ -66,11 +66,11 @@ function formatDate(value) {
             </template>
         </PageHeader>
 
-        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-success-subtle p-3 text-sm text-success-strong">
             {{ page.props.flash.success }}
         </div>
 
-        <div v-if="form.hasErrors" class="mb-4 rounded-md bg-rose-50 p-3 text-sm text-rose-700">
+        <div v-if="form.hasErrors" class="mb-4 rounded-md bg-danger-subtle p-3 text-sm text-danger-strong">
             <p v-for="(err, key) in form.errors" :key="key">{{ err }}</p>
         </div>
 
@@ -121,7 +121,7 @@ function formatDate(value) {
                                     v-if="submissions[index]?.file_url"
                                     :href="submissions[index].file_url"
                                     target="_blank"
-                                    class="text-indigo-600 hover:text-indigo-800"
+                                    class="text-primary-strong hover:text-primary-strong"
                                 >
                                     📎 Unduh
                                 </a>
@@ -137,8 +137,8 @@ function formatDate(value) {
                                     :min="0"
                                     :max="assignment.max_score"
                                     step="0.01"
-                                    class="w-24 rounded-md border border-border px-2 py-1 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                                    :class="{ 'border-rose-400': grade.score !== '' && (Number(grade.score) < 0 || Number(grade.score) > Number(assignment.max_score)) }"
+                                    class="w-24 rounded-md border border-border px-2 py-1 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-focus"
+                                    :class="{ 'border-danger': grade.score !== '' && (Number(grade.score) < 0 || Number(grade.score) > Number(assignment.max_score)) }"
                                 />
                             </td>
                             <td class="px-4 py-3">
@@ -146,7 +146,7 @@ function formatDate(value) {
                                     v-model="grade.feedback"
                                     type="text"
                                     placeholder="Feedback (opsional)"
-                                    class="w-40 rounded-md border border-border px-2 py-1 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                    class="w-40 rounded-md border border-border px-2 py-1 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-focus"
                                 />
                             </td>
                         </tr>

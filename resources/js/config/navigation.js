@@ -69,6 +69,8 @@ const navigation = {
         { label: 'AI Advisor', href: '/mahasiswa/ai-advisor', icon: '🤖', permission: 'ai-advisor.use' },
         { label: 'Skripsi', href: '/mahasiswa/skripsi', icon: '🎓', permission: 'thesis.view' },
         { label: 'Kerja Praktek', href: '/mahasiswa/kp', icon: '🏢', permission: 'internship.view' },
+        // Tanpa permission: setiap mahasiswa boleh mengelola profilnya sendiri.
+        { label: 'Pengaturan Profil', href: '/mahasiswa/profil', icon: '⚙️', permission: null },
     ],
     pimpinan: [
         { label: 'Dashboard', href: '/pimpinan/dashboard', icon: '🏠', permission: 'dashboard.view' },

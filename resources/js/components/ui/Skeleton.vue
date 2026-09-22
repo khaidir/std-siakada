@@ -1,16 +1,22 @@
 <script setup>
-defineProps({
+import { computed } from 'vue';
+
+const props = defineProps({
     variant: { type: String, default: 'line' },
 });
 
 const variants = {
-    line: 'bg-slate-200',
-    card: 'bg-slate-200 rounded-lg',
+    line: 'rounded bg-neutral-subtle',
+    text: 'rounded h-4 bg-neutral-subtle',
+    card: 'rounded-lg bg-neutral-subtle',
+    circle: 'rounded-full bg-neutral-subtle',
 };
+
+const tone = computed(() => variants[props.variant] ?? variants.line);
 </script>
 
 <template>
-    <div :class="variants[variant]" class="animate-pulse">
+    <div class="animate-pulse" :class="tone" aria-hidden="true">
         <slot />
     </div>
 </template>

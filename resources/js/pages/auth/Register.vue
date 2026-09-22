@@ -24,7 +24,7 @@ function submit() {
         <Card class="w-full max-w-md">
             <template #header>
                 <div class="text-center">
-                    <h1 class="text-2xl font-semibold text-slate-900">Daftar Akun</h1>
+                    <h1 class="text-2xl font-semibold text-content">Daftar Akun</h1>
                 </div>
             </template>
             <form @submit.prevent="submit" class="space-y-4">

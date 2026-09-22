@@ -53,7 +53,7 @@ function changeOffering() {
     router.get(route('mahasiswa.presensi.index'), { offering_id: localOfferingId.value }, { preserveState: true });
 }
 
-const percentageColor = props.percentage >= 80 ? 'text-emerald-600' : props.percentage >= 60 ? 'text-amber-600' : 'text-rose-600';
+const percentageColor = props.percentage >= 80 ? 'text-success-strong' : props.percentage >= 60 ? 'text-warning-strong' : 'text-danger-strong';
 </script>
 
 <template>
@@ -69,7 +69,7 @@ const percentageColor = props.percentage >= 80 ? 'text-emerald-600' : props.perc
             </template>
             <select
                 v-model="localOfferingId"
-                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:w-96"
+                class="w-full rounded-md border-border-strong shadow-sm focus:border-primary focus:ring-focus sm:w-96"
                 @change="changeOffering"
             >
                 <option v-for="o in offerings" :key="o.id" :value="o.id">

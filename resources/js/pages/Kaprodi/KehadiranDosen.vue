@@ -34,9 +34,9 @@ function viewDetail(lecturerId) {
 }
 
 function percentageColor(pct) {
-    if (pct >= 85) return 'text-emerald-600';
-    if (pct >= 70) return 'text-amber-600';
-    return 'text-rose-600';
+    if (pct >= 85) return 'text-success-strong';
+    if (pct >= 70) return 'text-warning-strong';
+    return 'text-danger-strong';
 }
 </script>
 
@@ -46,7 +46,7 @@ function percentageColor(pct) {
 
         <PageHeader title="Monitoring Kehadiran Dosen" subtitle="Rekap kehadiran mengajar dosen prodi Anda." />
 
-        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-success-subtle p-3 text-sm text-success-strong">
             {{ page.props.flash.success }}
         </div>
 
@@ -98,7 +98,7 @@ function percentageColor(pct) {
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border">
-                        <tr v-for="item in summary" :key="item.lecturer_id" class="hover:bg-slate-50">
+                        <tr v-for="item in summary" :key="item.lecturer_id" class="hover:bg-neutral-subtle">
                             <td class="px-4 py-3 font-mono text-xs">{{ item.nidn }}</td>
                             <td class="px-4 py-3 font-medium">{{ item.lecturer_name }}</td>
                             <td class="px-4 py-3 text-xs text-muted">{{ item.study_program }}</td>

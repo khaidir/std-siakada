@@ -119,11 +119,11 @@ function formatDate(value) {
 
         <PageHeader title="Materi Kuliah" subtitle="Kelola materi perkuliahan untuk setiap kelas." />
 
-        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-success-subtle p-3 text-sm text-success-strong">
             {{ page.props.flash.success }}
         </div>
 
-        <div v-if="form.hasErrors" class="mb-4 rounded-md bg-rose-50 p-3 text-sm text-rose-700">
+        <div v-if="form.hasErrors" class="mb-4 rounded-md bg-danger-subtle p-3 text-sm text-danger-strong">
             <p v-for="(err, key) in form.errors" :key="key">{{ err }}</p>
         </div>
 
@@ -167,7 +167,7 @@ function formatDate(value) {
                                 v-if="material.file_url"
                                 :href="material.file_url"
                                 target="_blank"
-                                class="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800"
+                                class="inline-flex items-center gap-1 text-primary-strong hover:text-primary-strong"
                             >
                                 📎 Lihat File
                             </a>
@@ -204,17 +204,17 @@ function formatDate(value) {
                 />
 
                 <div>
-                    <label class="mb-1 block text-sm font-medium text-slate-700">
+                    <label class="mb-1 block text-sm font-medium text-content">
                         File (opsional)
                         <span class="text-xs text-muted"> — PDF, DOC, PPT, ZIP, gambar, video (maks 20MB)</span>
                     </label>
                     <input
                         type="file"
                         accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.rar,.jpg,.jpeg,.png,.mp4,.mp3"
-                        class="block w-full text-sm text-slate-500 file:mr-4 file:rounded-md file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-indigo-700 hover:file:bg-indigo-100"
+                        class="block w-full text-sm text-muted file:mr-4 file:rounded-md file:border-0 file:bg-primary-subtle file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-strong hover:file:bg-primary-subtle"
                         @change="handleFileChange"
                     />
-                    <p v-if="form.errors.file" class="mt-1 text-xs text-rose-600">{{ form.errors.file }}</p>
+                    <p v-if="form.errors.file" class="mt-1 text-xs text-danger-strong">{{ form.errors.file }}</p>
                 </div>
 
                 <div class="flex justify-end gap-2 pt-2">

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Gender;
 use App\Enums\StudentStatus;
 use App\Models\Student;
 use App\Models\StudyProgram;
@@ -23,6 +24,12 @@ class StudentFactory extends Factory
             'status' => fake()->randomElement(StudentStatus::cases()),
             'gpa' => fake()->randomFloat(2, 0, 4),
             'total_sks' => fake()->numberBetween(0, 144),
+            // Biodata memakai locale id_ID agar data terlihat wajar untuk konteks Indonesia.
+            'birth_place' => fake('id_ID')->city(),
+            'birth_date' => fake()->dateTimeBetween('-27 years', '-17 years')->format('Y-m-d'),
+            'gender' => fake()->randomElement(Gender::cases()),
+            'address' => fake('id_ID')->address(),
+            'phone' => fake()->numerify('08##########'),
         ];
     }
 }

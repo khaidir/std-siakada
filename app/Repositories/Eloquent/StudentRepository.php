@@ -50,4 +50,49 @@ class StudentRepository implements StudentRepositoryContract
             ->where('user_id', $userId)
             ->first();
     }
+
+    public function profileForUser(int $userId): ?array
+    {
+        $student = Student::query()
+            ->select([
+                'id', 'user_id', 'nim', 'study_program_id', 'entry_year', 'status',
+                'gpa', 'total_sks', 'birth_place', 'birth_date', 'gender', 'address', 'phone',
+            ])
+            ->with([
+                'user:id,name,email',
+                'studyProgram:id,name',
+            ])
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($student === null) {
+            return null;
+        }
+
+        return [
+            'id' => $student->id,
+            'name' => $student->user?->name,
+            'email' => $student->user?->email,
+            // Field akademik dikirim hanya untuk ditampilkan, bukan untuk diubah.
+            'nim' => $student->nim,
+            'study_program' => $student->studyProgram?->name,
+            'entry_year' => $student->entry_year,
+            'status' => $student->status?->value,
+            'gpa' => $student->gpa,
+            'total_sks' => $student->total_sks,
+            // Biodata yang boleh diubah.
+            'birth_place' => $student->birth_place,
+            'birth_date' => $student->birth_date?->format('Y-m-d'),
+            'gender' => $student->gender?->value,
+            'address' => $student->address,
+            'phone' => $student->phone,
+        ];
+    }
+
+    public function updateProfile(int $studentId, array $data): void
+    {
+        Student::query()
+            ->where('id', $studentId)
+            ->update($data);
+    }
 }

@@ -51,17 +51,17 @@ function gradeBadgeVariant(letter) {
 }
 
 const ipColor = computed(() => {
-    if (props.ipSemester >= 3.5) return 'text-emerald-600';
-    if (props.ipSemester >= 2.75) return 'text-blue-600';
-    if (props.ipSemester >= 2.0) return 'text-amber-600';
-    return 'text-rose-600';
+    if (props.ipSemester >= 3.5) return 'text-success-strong';
+    if (props.ipSemester >= 2.75) return 'text-info-strong';
+    if (props.ipSemester >= 2.0) return 'text-warning-strong';
+    return 'text-danger-strong';
 });
 
 const ipkColor = computed(() => {
-    if (props.ipk >= 3.5) return 'text-emerald-600';
-    if (props.ipk >= 2.75) return 'text-blue-600';
-    if (props.ipk >= 2.0) return 'text-amber-600';
-    return 'text-rose-600';
+    if (props.ipk >= 3.5) return 'text-success-strong';
+    if (props.ipk >= 2.75) return 'text-info-strong';
+    if (props.ipk >= 2.0) return 'text-warning-strong';
+    return 'text-danger-strong';
 });
 
 function changeSemester() {
@@ -104,7 +104,7 @@ function changeSemester() {
             </template>
             <select
                 v-model="localSemesterId"
-                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:w-64"
+                class="w-full rounded-md border-border-strong shadow-sm focus:border-primary focus:ring-focus sm:w-64"
                 @change="changeSemester"
             >
                 <option v-for="s in semesters" :key="s.id" :value="s.id">

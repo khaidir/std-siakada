@@ -27,7 +27,7 @@ function submit() {
     <div class="flex min-h-screen items-center justify-center p-4">
         <Card class="w-full max-w-md">
             <template #header>
-                <h1 class="text-center text-2xl font-semibold text-slate-900">Atur Ulang Kata Sandi</h1>
+                <h1 class="text-center text-2xl font-semibold text-content">Atur Ulang Kata Sandi</h1>
             </template>
             <form @submit.prevent="submit" class="space-y-4">
                 <Input v-model="form.token" type="hidden" />

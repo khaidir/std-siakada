@@ -117,7 +117,7 @@ function degreeLabel(level) {
 
         <PageHeader title="Program Studi" subtitle="Kelola data program studi." />
 
-        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-emerald-50 p-3 text-sm text-emerald-700">
+        <div v-if="page.props.flash?.success" class="mb-4 rounded-md bg-success-subtle p-3 text-sm text-success-strong">
             {{ page.props.flash.success }}
         </div>
 

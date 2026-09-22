@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Gender;
 use App\Enums\StudentStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +11,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['user_id', 'nim', 'study_program_id', 'entry_year', 'status', 'gpa', 'total_sks'])]
+#[Fillable([
+    'user_id',
+    'nim',
+    'study_program_id',
+    'entry_year',
+    'status',
+    'gpa',
+    'total_sks',
+    // Biodata yang boleh diubah mahasiswa lewat halaman Profile Settings.
+    'birth_place',
+    'birth_date',
+    'gender',
+    'address',
+    'phone',
+])]
 class Student extends Model
 {
     use HasFactory;
@@ -21,6 +36,8 @@ class Student extends Model
             'status' => StudentStatus::class,
             'gpa' => 'decimal:2',
             'total_sks' => 'integer',
+            'birth_date' => 'date',
+            'gender' => Gender::class,
         ];
     }
 
