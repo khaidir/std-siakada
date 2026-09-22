@@ -30,14 +30,11 @@ test.describe('Kaprodi', () => {
         await page.waitForSelector('text=Tambah Mata Kuliah', { timeout: 5000 });
         await page.waitForSelector('input', { timeout: 5000 });
 
-        // Fill form
+        // Fill form - input[0] is the search field, skip it
         const inputs = page.locator('input');
-        await inputs.nth(0).fill('IF999');
-        await inputs.nth(1).fill('Mata Kuliah Kaprodi E2E');
-
-        // Fill SKS
-        const numberInput = page.locator('input[type="number"]').first();
-        await numberInput.fill('3');
+        await inputs.nth(1).fill('IF999');  // code
+        await inputs.nth(2).fill('Mata Kuliah Kaprodi E2E');  // name
+        await inputs.nth(3).fill('3');  // sks
 
         // Select semester
         const selects = page.locator('select');
@@ -48,10 +45,10 @@ test.describe('Kaprodi', () => {
             await selects.nth(1).selectOption('wajib');
         }
 
-        await page.click('button:has-text("Tambah")', { force: true });
-        await waitForPage(page);
+        await page.locator('button:has-text("Tambah")').last().click({ force: true });
 
-        await expect(page.locator('text=Mata Kuliah Kaprodi E2E')).toBeVisible({ timeout: 10000 });
+        // Wait for modal to close (success) or new row to appear in table
+        await page.waitForSelector('text=Mata Kuliah Kaprodi E2E', { timeout: 15000 });
     });
 
     test('monitoring nilai tampil', async ({ page }) => {

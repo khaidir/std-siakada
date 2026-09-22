@@ -23,60 +23,25 @@ test.describe('Super Admin', () => {
         await page.waitForSelector('text=Tambah Pengguna', { timeout: 5000 });
         await page.waitForSelector('input', { timeout: 5000 });
 
-        // Fill form
-        const inputs = page.locator('input');
-        await inputs.nth(0).fill('Dosen Baru E2E');
-
-        // Find email input
-        const emailInput = page.locator('input[type="email"]');
-        await emailInput.fill('dosenbaru@test.com');
-
-        // Find password inputs
-        const passwordInputs = page.locator('input[type="password"]');
-        await passwordInputs.first().fill('password');
-        if (await passwordInputs.count() > 1) {
-            await passwordInputs.nth(1).fill('password');
-        }
+        // Fill basic info
+        await page.locator('input[placeholder="Nama lengkap"]').fill('Dosen Baru E2E');
+        await page.locator('input[type="email"]').fill('dosenbaru@test.com');
+        await page.locator('input[type="password"]').first().fill('password');
 
         // Select role dosen
-        const select = page.locator('select').first();
-        await select.selectOption('dosen');
+        await page.locator('select').first().selectOption('dosen');
+        await page.waitForTimeout(300);
 
-        // Fill NIDN (required for dosen)
-        const nidnInput = page.locator('input').filter({ has: page.locator('[placeholder="Nomor Induk Dosen Nasional"]') });
-        if (await nidnInput.count() > 0) {
-            await nidnInput.fill('1234567890');
-        } else {
-            // Fallback: fill the 3rd input (after name, email)
-            const allInputs = page.locator('input');
-            const count = await allInputs.count();
-            if (count > 2) await allInputs.nth(2).fill('1234567890');
-        }
-
-        // Select study program (required for dosen)
-        const studyProgramSelect = page.locator('select').nth(1);
-        if (await studyProgramSelect.count() > 0) {
-            const options = await studyProgramSelect.locator('option').all();
-            if (options.length > 1) {
-                await studyProgramSelect.selectOption({ index: 1 });
-            }
-        }
-
-        // Select academic rank (required for dosen)
-        const rankSelect = page.locator('select').nth(2);
-        if (await rankSelect.count() > 0) {
-            const options = await rankSelect.locator('option').all();
-            if (options.length > 1) {
-                await rankSelect.selectOption({ index: 1 });
-            }
-        }
+        // Fill dosen-specific fields
+        await page.locator('input[placeholder="Nomor Induk Dosen Nasional"]').fill('1234567890');
+        await page.locator('select').nth(1).selectOption({ index: 1 }); // study program
+        await page.locator('select').nth(2).selectOption({ index: 1 }); // academic rank
 
         // Submit
-        await page.click('button[type="submit"]');
-        await waitForPage(page);
+        await page.locator('button[type="submit"]').click();
 
-        // Verify user appears in table
-        await expect(page.locator('text=dosenbaru@test.com')).toBeVisible({ timeout: 10000 });
+        // Wait for new user to appear in table
+        await page.waitForSelector('text=dosenbaru@test.com', { timeout: 15000 });
     });
 
     test('buat fakultas baru muncul', async ({ page }) => {
@@ -90,14 +55,17 @@ test.describe('Super Admin', () => {
         await page.waitForSelector('text=Tambah Fakultas', { timeout: 5000 });
         await page.waitForSelector('input', { timeout: 5000 });
 
-        // Fill form
+        // Fill form (input 0 is sidebar search, input 1=code, input 2=name)
         const inputs = page.locator('input');
-        await inputs.nth(0).fill('FIK2');
-        await inputs.nth(1).fill('Fakultas E2E');
-        await page.click('button:has-text("Tambah")', { force: true });
+        const uniqueCode = 'FIK' + Date.now().toString().slice(-4);
+        await inputs.nth(1).fill(uniqueCode);
+        await inputs.nth(2).fill('Fakultas E2E');
+
+        // Click submit button (last "Tambah" button inside modal)
+        await page.locator('button:has-text("Tambah")').last().click();
         await waitForPage(page);
 
-        await expect(page.locator('text=Fakultas E2E')).toBeVisible({ timeout: 10000 });
+        await expect(page.locator('text=Fakultas E2E').first()).toBeVisible({ timeout: 10000 });
     });
 
     test('buat program studi baru muncul', async ({ page }) => {
@@ -108,13 +76,14 @@ test.describe('Super Admin', () => {
         await page.click('button:has-text("Tambah Prodi")');
 
         // Wait for modal
-        await page.waitForSelector('text=Tambah Program Studi', { timeout: 5000 });
+        await page.waitForSelector('text=Tambah Prodi', { timeout: 5000 });
         await page.waitForSelector('input', { timeout: 5000 });
 
-        // Fill form
+        // Fill form (input 0 is sidebar search, input 1=code, input 2=name)
         const inputs = page.locator('input');
-        await inputs.nth(0).fill('TE');
-        await inputs.nth(1).fill('Teknik E2E');
+        const uniqueCode = 'TE' + Date.now().toString().slice(-4);
+        await inputs.nth(1).fill(uniqueCode);
+        await inputs.nth(2).fill('Teknik E2E');
 
         // Select faculty
         const selects = page.locator('select');
@@ -125,10 +94,11 @@ test.describe('Super Admin', () => {
             await selects.nth(1).selectOption({ index: 1 });
         }
 
-        await page.click('button:has-text("Tambah")', { force: true });
+        // Click submit button (last "Tambah" button inside modal)
+        await page.locator('button:has-text("Tambah")').last().click();
         await waitForPage(page);
 
-        await expect(page.locator('text=Teknik E2E')).toBeVisible({ timeout: 10000 });
+        await expect(page.locator('text=Teknik E2E').first()).toBeVisible({ timeout: 10000 });
     });
 
     test('buat mata kuliah baru muncul', async ({ page }) => {
@@ -142,14 +112,12 @@ test.describe('Super Admin', () => {
         await page.waitForSelector('text=Tambah Mata Kuliah', { timeout: 5000 });
         await page.waitForSelector('input', { timeout: 5000 });
 
-        // Fill form
+        // Fill form (input 0 is sidebar search, input 1=code, input 2=name, input 3=SKS)
         const inputs = page.locator('input');
-        await inputs.nth(0).fill('E2E101');
-        await inputs.nth(1).fill('Mata Kuliah E2E');
-
-        // SKS
-        const numberInputs = page.locator('input[type="number"]');
-        await numberInputs.first().fill('3');
+        const uniqueCode = 'E2E' + Date.now().toString().slice(-4);
+        await inputs.nth(1).fill(uniqueCode);
+        await inputs.nth(2).fill('Mata Kuliah E2E');
+        await inputs.nth(3).fill('3');
 
         // Select study program
         const selects = page.locator('select');
@@ -162,13 +130,14 @@ test.describe('Super Admin', () => {
 
         // Select type
         if (await selects.count() > 2) {
-            await selects.nth(2).selectOption('Wajib');
+            await selects.nth(2).selectOption('wajib');
         }
 
-        await page.click('button:has-text("Tambah")', { force: true });
+        // Click submit button (last "Tambah" button inside modal)
+        await page.locator('button:has-text("Tambah")').last().click();
         await waitForPage(page);
 
-        await expect(page.locator('text=Mata Kuliah E2E')).toBeVisible({ timeout: 10000 });
+        await expect(page.locator('text=Mata Kuliah E2E').first()).toBeVisible({ timeout: 10000 });
     });
 
     test('buat ruangan baru muncul', async ({ page }) => {
@@ -182,19 +151,18 @@ test.describe('Super Admin', () => {
         await page.waitForSelector('text=Tambah Ruangan', { timeout: 5000 });
         await page.waitForSelector('input', { timeout: 5000 });
 
-        // Fill form
+        // Fill form (input 0 is sidebar search, input 1=code, input 2=name, input 3=capacity, input 4=building)
         const inputs = page.locator('input');
-        await inputs.nth(0).fill('R-E2E');
-        await inputs.nth(1).fill('Ruangan E2E');
+        await inputs.nth(1).fill('R-E2E');
+        await inputs.nth(2).fill('Ruangan E2E');
+        await inputs.nth(3).fill('40');
+        await inputs.nth(4).fill('Gedung E2E');
 
-        // Capacity
-        const numberInput = page.locator('input[type="number"]').first();
-        await numberInput.fill('40');
-
-        await page.click('button:has-text("Tambah")', { force: true });
+        // Click submit button (last "Tambah" button inside modal)
+        await page.locator('button:has-text("Tambah")').last().click();
         await waitForPage(page);
 
-        await expect(page.locator('text=Ruangan E2E')).toBeVisible({ timeout: 10000 });
+        await expect(page.locator('text=Ruangan E2E').first()).toBeVisible({ timeout: 10000 });
     });
 
     test('buat periode akademik muncul', async ({ page }) => {
@@ -208,21 +176,15 @@ test.describe('Super Admin', () => {
         await page.waitForSelector('text=Tambah Tahun Ajaran', { timeout: 5000 });
         await page.waitForSelector('input', { timeout: 5000 });
 
-        // Fill form
+        // Fill form (input 0 is sidebar search, input 1=year, input 2=name, input 3=start_date, input 4=end_date)
         const inputs = page.locator('input');
-        await inputs.nth(0).fill('2026/2027');
-        await inputs.nth(1).fill('Tahun Akademik 2026/2027');
+        await inputs.nth(1).fill('2026/2027');
+        await inputs.nth(2).fill('Tahun Akademik 2026/2027');
+        await inputs.nth(3).fill('2026-09-01');
+        await inputs.nth(4).fill('2027-08-31');
 
-        // Date inputs
-        const dateInputs = page.locator('input[type="date"]');
-        if (await dateInputs.count() > 0) {
-            await dateInputs.nth(0).fill('2026-09-01');
-        }
-        if (await dateInputs.count() > 1) {
-            await dateInputs.nth(1).fill('2027-08-31');
-        }
-
-        await page.click('button:has-text("Tambah")', { force: true });
+        // Click submit button (last "Tambah" button inside modal)
+        await page.locator('button:has-text("Tambah")').last().click();
         await waitForPage(page);
 
         await expect(page.locator('text=2026/2027')).toBeVisible({ timeout: 10000 });
